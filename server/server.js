@@ -12,6 +12,7 @@ let app = express();
 
 app.use(bodyParser.json()); //converts json data into an object
 
+//post todo route
 app.post('/todos', (req, res) => {
     let todo = new Todo({   //setting up the todo object
         text: req.body.text
@@ -19,6 +20,15 @@ app.post('/todos', (req, res) => {
 
     todo.save().then((doc) => { //saves the users todo
         res.send(doc); 
+    }, (e) => {
+        res.status(400).send(e); //throws an error (404)
+    });
+});
+
+//get todo route
+app.get('/todos', (req, res) => {
+    Todo.find().then((todos) => { //fetches todos
+        res.send({todos}); 
     }, (e) => {
         res.status(400).send(e); //throws an error (404)
     });
