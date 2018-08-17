@@ -10,7 +10,7 @@ let db = {
     localhost: 'mongodb://localhost:27017/TodoApp',
     mlab: `mongodb://${dbUser}:${dbPassword}!@ds123562.mlab.com:23562/todoapp`
   };
-  mongoose.connect( db.localhost || db.mlab);
+  mongoose.connect( process.env.PORT ? db.mlab : db.localhost);
 
 module.exports = {
     mongoose
