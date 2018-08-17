@@ -6,7 +6,7 @@ const { ObjectID } = require('mongodb');
 // - - [ local modules ] - - 
 let { mongoose } = require('./db/mongoose');
 let { Todo } = require('./models/todo');
-let { User } = require('./models/user');  
+let { User } = require('./models/user');
 
 // - - [ app code ] - - 
 let app = express();
@@ -35,6 +35,7 @@ app.get('/todos', (req, res) => {
     });
 });
 
+//get todo by id route
 app.get('/todos/:id', (req, res) => {
     let id = req.params.id;
 
