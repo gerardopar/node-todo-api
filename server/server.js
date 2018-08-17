@@ -10,6 +10,7 @@ let { User } = require('./models/user');
 
 // - - [ app code ] - - 
 let app = express();
+const port = process.env.PORT || 3000;
 
 app.use(bodyParser.json()); //converts json data into an object
 
@@ -55,8 +56,8 @@ app.get('/todos/:id', (req, res) => {
 });
 
 // setting up our server on port 3000
-app.listen(3000, () => {
-    console.log('Server up on port 3000');
+app.listen(port, () => {
+    console.log(`Server up on port ${port}`);
 });
 
 
