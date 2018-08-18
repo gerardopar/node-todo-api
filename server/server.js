@@ -1,4 +1,5 @@
 // - - [ imported modules ] - - 
+const _ = require('lodash');
 const express = require('express');
 const bodyParser = require('body-parser');
 const { ObjectID } = require('mongodb');
@@ -55,7 +56,7 @@ app.get('/todos/:id', (req, res) => {
     });
 });
 
-//delete tode by id route
+//delete todo by id route
 app.delete('/todos/:id', (req, res) => {
     let id = req.params.id;
 
@@ -73,6 +74,38 @@ app.delete('/todos/:id', (req, res) => {
         res.status(400).send();
     });
 
+});
+
+//update todo by id route
+app.patch('/todos/:id', (req, res) => {
+    let id = req.params.id;
+        //the pick method allows properties to be selected from an object 
+    let body = _.pick(req.body, ['text', 'completed']);
+
+    if(!ObjectID.isValid(id)) {
+        return res.status(404).send();
+    }
+
+    //checking if a todo is completed
+    if(_.isBoolean(body.completed) && body.completed) {
+        body.completedAt = new Date().getTime();
+    } else {
+        body.completed = false;
+        body.completedAt = null;
+    }
+
+    //updating the todo
+        //setting a new body with the mongoDB update operators
+    Todo.findByIdAndUpdate(id, {$set: body}, {new: true})
+        .then((todo) => {
+            if(!todo) {
+                return res.status(404).send();
+            }
+            
+            res.send({todo});
+        }).catch((e) => {
+            res.status(400).send();
+        })
 });
 
 // setting up our server on port 3000
